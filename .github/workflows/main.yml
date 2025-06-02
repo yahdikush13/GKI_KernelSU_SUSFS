@@ -75,7 +75,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - id: set-matrix
-        run: |
+        run: 
           VARIANTS=()
           [[ "${{ inputs.include_wild }}" == "true" ]] && VARIANTS+=("\"WILD\"")
           [[ "${{ inputs.include_ksu }}" == "true" ]] && VARIANTS+=("\"KSU\"")
