@@ -453,18 +453,6 @@ jobs:
           zip -r "../$ZIP_NAME" ./*
           rm ./Image
           
-          ZIP_NAME="${{ inputs.kernelsu_variant }}-${{ inputs.android_version }}-${{ inputs.kernel_version }}.${{ inputs.sub_level }}-${{ inputs.os_patch_level }}-AnyKernel3-lz4.zip"
-          echo "Creating zip file: $ZIP_NAME..."
-          mv ../Image.lz4 ./Image.lz4
-          zip -r "../$ZIP_NAME" ./*
-          rm ./Image.lz4
-          
-          ZIP_NAME="${{ inputs.kernelsu_variant }}-${{ inputs.android_version }}-${{ inputs.kernel_version }}.${{ inputs.sub_level }}-${{ inputs.os_patch_level }}-AnyKernel3-gz.zip"
-          echo "Creating zip file: $ZIP_NAME..."
-          mv ../Image.gz ./Image.gz
-          zip -r "../$ZIP_NAME" ./*
-          rm ./Image.gz
-
       - name: Android 12 boot image build script
         if: ${{ inputs.android_version == 'android12' }}
         run: |
@@ -505,16 +493,6 @@ jobs:
           $AVBTOOL add_hash_footer --partition_name boot --partition_size $((64 * 1024 * 1024)) --image boot.img --algorithm SHA256_RSA2048 --key $BOOT_SIGN_KEY_PATH
           cp ./boot.img ../${{ inputs.kernelsu_variant }}-${{ inputs.android_version }}-${{ inputs.kernel_version }}.${{ inputs.sub_level }}-${{ inputs.os_patch_level }}-boot.img
           
-          echo "Building boot-gz.img"
-          $MKBOOTIMG --header_version 4 --kernel Image.gz --output boot-gz.img --ramdisk out/ramdisk --os_version 12.0.0 --os_patch_level "${{ inputs.os_patch_level }}"
-          $AVBTOOL add_hash_footer --partition_name boot --partition_size $((64 * 1024 * 1024)) --image boot-gz.img --algorithm SHA256_RSA2048 --key $BOOT_SIGN_KEY_PATH
-          cp ./boot-gz.img ../${{ inputs.kernelsu_variant }}-${{ inputs.android_version }}-${{ inputs.kernel_version }}.${{ inputs.sub_level }}-${{ inputs.os_patch_level }}-boot-gz.img
-          
-          echo "Building boot-lz4.img"
-          $MKBOOTIMG --header_version 4 --kernel Image.lz4 --output boot-lz4.img --ramdisk out/ramdisk --os_version 12.0.0 --os_patch_level "${{ inputs.os_patch_level }}"
-          $AVBTOOL add_hash_footer --partition_name boot --partition_size $((64 * 1024 * 1024)) --image boot-lz4.img --algorithm SHA256_RSA2048 --key $BOOT_SIGN_KEY_PATH
-          cp ./boot-lz4.img ../${{ inputs.kernelsu_variant }}-${{ inputs.android_version }}-${{ inputs.kernel_version }}.${{ inputs.sub_level }}-${{ inputs.os_patch_level }}-boot-lz4.img
-
       - name: Android 13/14/15 boot image build script
         if: ${{ inputs.android_version == 'android13' || inputs.android_version == 'android14' || inputs.android_version == 'android15' }}
         run: |
@@ -528,15 +506,6 @@ jobs:
           $AVBTOOL add_hash_footer --partition_name boot --partition_size $((64 * 1024 * 1024)) --image boot.img --algorithm SHA256_RSA2048 --key $BOOT_SIGN_KEY_PATH
           cp ./boot.img ../${{ inputs.kernelsu_variant }}-${{ inputs.android_version }}-${{ inputs.kernel_version }}.${{ inputs.sub_level }}-${{ inputs.os_patch_level }}-boot.img
           
-          echo "Building boot-gz.img"
-          $MKBOOTIMG --header_version 4 --kernel Image.gz --output boot-gz.img
-          $AVBTOOL add_hash_footer --partition_name boot --partition_size $((64 * 1024 * 1024)) --image boot-gz.img --algorithm SHA256_RSA2048 --key $BOOT_SIGN_KEY_PATH
-          cp ./boot-gz.img ../${{ inputs.kernelsu_variant }}-${{ inputs.android_version }}-${{ inputs.kernel_version }}.${{ inputs.sub_level }}-${{ inputs.os_patch_level }}-boot-gz.img
-          
-          echo "Building boot-lz4.img"
-          $MKBOOTIMG --header_version 4 --kernel Image.lz4 --output boot-lz4.img
-          $AVBTOOL add_hash_footer --partition_name boot --partition_size $((64 * 1024 * 1024)) --image boot-lz4.img --algorithm SHA256_RSA2048 --key $BOOT_SIGN_KEY_PATH
-          cp ./boot-lz4.img ../${{ inputs.kernelsu_variant }}-${{ inputs.android_version }}-${{ inputs.kernel_version }}.${{ inputs.sub_level }}-${{ inputs.os_patch_level }}-boot-lz4.img
           
       - name: Compress all img files with gzip
         run: |
@@ -550,5 +519,4 @@ jobs:
           name: ${{ inputs.kernelsu_variant }}-kernel-${{ env.CONFIG }}
           path: |
             *.zip
-            *.img.gz
             *Image*
