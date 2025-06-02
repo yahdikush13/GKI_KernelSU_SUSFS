@@ -346,7 +346,11 @@ jobs:
           echo "CONFIG_NET_SCH_FQ=y" >> ./common/arch/arm64/configs/gki_defconfig
           echo "CONFIG_TCP_CONG_BIC=n" >> ./common/arch/arm64/configs/gki_defconfig
           echo "CONFIG_TCP_CONG_WESTWOOD=n" >> ./common/arch/arm64/configs/gki_defconfig
-          echo "CONFIG_TCP_CONG_HTCP=n" >> ./common/arch/arm64/configs/gki_defconfig 
+          echo "CONFIG_TCP_CONG_HTCP=n" >> ./common/arch/arm64/configs/gki_defconfig
+          echo "CONFIG_CPU_FREQ_GOV_SCHEDHORIZON=y" >> ./common/arch/arm64/configs/gki_defconfig
+          echo "CONFIG_NTFS3_FS=y" >> ./common/arch/arm64/configs/gki_defconfig
+          echo "CONFIG_NTFS3_LZX_XPRESS=y" >> ./common/arch/arm64/configs/gki_defconfig
+          echo "CONFIG_HZ_300=y" >> ./common/arch/arm64/configs/gki_defconfig 
 
           # Remove check_defconfig
           sed -i 's/check_defconfig//' ./common/build.config.gki
